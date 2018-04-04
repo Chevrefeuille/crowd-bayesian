@@ -5,7 +5,6 @@ import numpy as np
 
 if __name__ == "__main__":
     
-    
     train_ratio = 0.3
     alphas = [0, 0.5, 1]
     for a in alphas:

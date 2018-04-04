@@ -99,16 +99,14 @@ def find_bins(file_path):
     binstallH = find_bins_tall_height(h_tall)
     return binsD, binsvG, binsvDiff, binsvvdot, binsvddot, binsavgH, binsHDiff, binsshortH, binstallH
 
-def compute_probablity_class(file_path, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, alpha):
+def compute_probability_class(file_path, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, alpha):
     bins = find_bins(file_path)
     p0dry, p0koi = 0.5, 0.5
     n_data = len(bins[0])
     p_post = np.zeros((n_data, 2))
     for j in range(n_data):
-        p_likel_dry = pdf_dry_d[bins[0][j]] * pdf_dry_grp_v[bins[1][j]] * \
-        pdf_dry_veldiff[bins[2][j]] * pdf_dry_heightdiff[bins[6][j]]
-        p_likel_koi = pdf_koi_d[bins[0][j]] * pdf_koi_grp_v[bins[1][j]] * \
-        pdf_koi_veldiff[bins[2][j]] * pdf_koi_heightdiff[bins[6][j]]
+        p_likel_dry = pdf_dry_d[bins[0][j]] * pdf_dry_grp_v[bins[1][j]] * pdf_dry_veldiff[bins[2][j]] * pdf_dry_heightdiff[bins[6][j]]
+        p_likel_koi = pdf_koi_d[bins[0][j]] * pdf_koi_grp_v[bins[1][j]] * pdf_koi_veldiff[bins[2][j]] * pdf_koi_heightdiff[bins[6][j]]
 
         if j == 0:
             p_prior_dry = p0dry
@@ -122,8 +120,8 @@ def compute_probablity_class(file_path, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf
 
         temp = p_cond_dry + p_cond_koi
 
-        p_cond_dry = p_cond_dry / temp
-        p_cond_koi = p_cond_koi / temp
+        p_cond_dry /= temp
+        p_cond_koi /= temp
 
         p_post[j] = [p_cond_dry,p_cond_koi]
 
@@ -133,26 +131,20 @@ def compute_probablity_class(file_path, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf
 def compute_accuracy(dry_set, koi_set, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, alpha):
     dry_wrong, dry_right = 0, 0
     for file_path in dry_set:
-        p_dry, p_koi = compute_probablity_class(file_path, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, alpha)
+        p_dry, p_koi = compute_probability_class(file_path, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, alpha)
         if p_dry < 0.5:
             dry_wrong += 1
         else:
-            dry_right +=1
+            dry_right += 1
 
     koi_wrong, koi_right = 0, 0
     for file_path in koi_set: 
-        p_dry, p_koi = compute_probablity_class(file_path, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, alpha)
+        p_dry, p_koi = compute_probability_class(file_path, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, alpha)
         if p_koi < 0.5:
             koi_wrong += 1
         else:
-            koi_right +=1
+            koi_right += 1
     return dry_wrong, dry_right, koi_wrong, koi_right
 
-if __name__ == "__main__":
-    pdf_dry_d, pdf_koi_d = np.load('../data/pdf_D_dry.dat'), np.load('../data/pdf_D_koi.dat')
-    pdf_dry_grp_v, pdf_koi_grp_v = np.load('../data/pdf_vG_dry.dat'), np.load('../data/pdf_vG_koi.dat')
-    pdf_dry_veldiff, pdf_koi_veldiff = np.load('../data/pdf_vDiff_dry.dat'), np.load('../data/pdf_vDiff_koi.dat')
-    pdf_dry_heightdiff, pdf_koi_heightdiff = np.load('../data/pdf_HDiff_dry.dat'), np.load('../data/pdf_HDiff_koi.dat')
-    p_dry, p_koi = compute_probablity_class('../data/doryo/day_0109_270_threshold.dat', pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, 0.5)
     
 
