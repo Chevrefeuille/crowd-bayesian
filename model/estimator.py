@@ -1,6 +1,6 @@
 import numpy as np
-from constants import *
-import tools
+from model.constants import *
+from model import tools
 
 def find_bins_distance(distances):
     """

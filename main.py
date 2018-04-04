@@ -1,6 +1,6 @@
-import estimator
-import tools
-from compute_pdfs import train
+from model import estimator
+import model.tools
+from model.compute_pdfs import train
 import numpy as np
 
 if __name__ == "__main__":
@@ -11,14 +11,14 @@ if __name__ == "__main__":
     for a in alphas:
         dry_rights, koi_rights = [], []
         for epoch in range(20):
-            dry_set, koi_set = tools.get_data_set('../data/')
-            dry_train, dry_test, koi_train, koi_test = tools.shuffle_data_set(dry_set, koi_set, train_ratio)
+            dry_set, koi_set = model.tools.get_data_set('data/classes/')
+            dry_train, dry_test, koi_train, koi_test = model.tools.shuffle_data_set(dry_set, koi_set, train_ratio)
             train(dry_train, koi_train)
 
-            pdf_dry_d, pdf_koi_d = np.load('../data/pdf_D_dry.dat'), np.load('../data/pdf_D_koi.dat')
-            pdf_dry_grp_v, pdf_koi_grp_v = np.load('../data/pdf_vG_dry.dat'), np.load('../data/pdf_vG_koi.dat')
-            pdf_dry_veldiff, pdf_koi_veldiff = np.load('../data/pdf_vDiff_dry.dat'), np.load('../data/pdf_vDiff_koi.dat')
-            pdf_dry_heightdiff, pdf_koi_heightdiff = np.load('../data/pdf_HDiff_dry.dat'), np.load('../data/pdf_HDiff_koi.dat')
+            pdf_dry_d, pdf_koi_d = np.load('data/pdfs/pdf_D_dry.dat'), np.load('data/pdfs/pdf_D_koi.dat')
+            pdf_dry_grp_v, pdf_koi_grp_v = np.load('data/pdfs/pdf_vG_dry.dat'), np.load('data/pdfs/pdf_vG_koi.dat')
+            pdf_dry_veldiff, pdf_koi_veldiff = np.load('data/pdfs/pdf_vDiff_dry.dat'), np.load('data/pdfs/pdf_vDiff_koi.dat')
+            pdf_dry_heightdiff, pdf_koi_heightdiff = np.load('data/pdfs/pdf_HDiff_dry.dat'), np.load('data/pdfs/pdf_HDiff_koi.dat')
 
             dry_wrong, dry_right, koi_wrong, koi_right = estimator.compute_accuracy(dry_test, koi_test, pdf_dry_d, pdf_koi_d, pdf_dry_grp_v, pdf_koi_grp_v, pdf_dry_veldiff, pdf_koi_veldiff, pdf_dry_heightdiff, pdf_koi_heightdiff, a)
             dry_rights += [dry_right]

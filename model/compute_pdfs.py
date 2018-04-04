@@ -1,6 +1,6 @@
-from constants import *
+from model.constants import *
 import numpy as np
-import tools
+from model import tools
 import math
 import glob
 import matplotlib.pyplot as plt
@@ -143,31 +143,31 @@ def train(dry_set, koi_set):
         htallH_cum_dry += histograms[8]
     
     pdf_D_dry = hD_cum_dry / sum(hD_cum_dry) / D_BIN_SIZE
-    with open('../data/pdf_D_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_D_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_D_dry)
     pdf_vG_dry = hvG_cum_dry / sum(hvG_cum_dry) / VEL_BIN_SIZE
-    with open('../data/pdf_vG_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_vG_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_vG_dry)
     pdf_vDiff_dry = hvDiff_cum_dry / sum(hvDiff_cum_dry) / VEL_BIN_SIZE
-    with open('../data/pdf_vDiff_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_vDiff_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_vDiff_dry)
     pdf_vvdot_dry = hvvdot_cum_dry / sum(hvvdot_cum_dry) / VVDOT_BIN_SIZE
-    with open('../data/pdf_vvdot_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_vvdot_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_vvdot_dry)
     pdf_vddot_dry = hvddot_cum_dry / sum(hvddot_cum_dry) / VDDOT_BIN_SIZE
-    with open('../data/pdf_vddot_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_vddot_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_vddot_dry)
     pdf_avgH_dry = havgH_cum_dry / sum(havgH_cum_dry) / HEIGHT_BIN_SIZE
-    with open('../data/pdf_avgH_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_avgH_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_avgH_dry)
     pdf_HDiff_dry = hHDiff_cum_dry / sum(hHDiff_cum_dry) / HEIGHTDIFF_BIN_SIZE
-    with open('../data/pdf_HDiff_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_HDiff_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_HDiff_dry)
     pdf_avgH_dry = havgH_cum_dry / sum(hshortH_cum_dry) / HEIGHT_BIN_SIZE
-    with open('../data/pdf_avgH_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_avgH_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_avgH_dry)
     pdf_avgH_dry = havgH_cum_dry / sum(htallH_cum_dry) / HEIGHT_BIN_SIZE
-    with open('../data/pdf_avgH_dry.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_avgH_dry.dat', 'wb') as outfile:
         np.save(outfile, pdf_avgH_dry)
 
     hD_cum_koi = np.zeros((round((D_MAX_TOLERABLE - D_MIN_TOLERABLE) / D_BIN_SIZE)))
@@ -193,31 +193,31 @@ def train(dry_set, koi_set):
         htallH_cum_koi += histograms[8]
     
     pdf_D_koi = hD_cum_koi / sum(hD_cum_koi) / D_BIN_SIZE
-    with open('../data/pdf_D_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_D_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_D_koi)
     pdf_vG_koi = hvG_cum_koi / sum(hvG_cum_koi) / VEL_BIN_SIZE
-    with open('../data/pdf_vG_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_vG_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_vG_koi)
     pdf_vDiff_koi = hvDiff_cum_koi / sum(hvDiff_cum_koi) / VEL_BIN_SIZE
-    with open('../data/pdf_vDiff_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_vDiff_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_vDiff_koi)
     pdf_vvdot_koi = hvvdot_cum_koi / sum(hvvdot_cum_koi) / VVDOT_BIN_SIZE
-    with open('../data/pdf_vvdot_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_vvdot_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_vvdot_koi)
     pdf_vddot_koi = hvddot_cum_koi / sum(hvddot_cum_koi) / VDDOT_BIN_SIZE
-    with open('../data/pdf_vddot_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_vddot_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_vddot_koi)
     pdf_avgH_koi = havgH_cum_koi / sum(havgH_cum_koi) / HEIGHT_BIN_SIZE
-    with open('../data/pdf_avgH_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_avgH_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_avgH_koi)
     pdf_HDiff_koi = hHDiff_cum_koi / sum(hHDiff_cum_koi) / HEIGHTDIFF_BIN_SIZE
-    with open('../data/pdf_HDiff_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_HDiff_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_HDiff_koi)
     pdf_avgH_koi = havgH_cum_koi / sum(hshortH_cum_koi) / HEIGHT_BIN_SIZE
-    with open('../data/pdf_avgH_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_avgH_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_avgH_koi)
     pdf_avgH_koi = havgH_cum_koi / sum(htallH_cum_koi) / HEIGHT_BIN_SIZE
-    with open('../data/pdf_avgH_koi.dat', 'wb') as outfile:
+    with open('data/pdfs/pdf_avgH_koi.dat', 'wb') as outfile:
         np.save(outfile, pdf_avgH_koi)
 
     
