@@ -5,20 +5,6 @@ from os import listdir
 import random
 from model.constants import *
 
-def pick_files():
-    """
-    This function eliminates some files from the analysis 
-
-    The criterion is having at least 60 lines (observation points)
-    after thresholding with the following: 
-    (ie 60 lines in data file, 60 * 0.5 sec = 30 sec)
-
-    1. Distance between partners 
-    2. Velocity of group 
-    3. Height of partners
-    maybe some others...
-    """
-
 def convert(data):
     """
     Convert data to use appropriate units
@@ -70,7 +56,7 @@ def extract_individual_data(data):
     return dataA, dataB
 
 
-def compute_parameters(dataA, dataB):
+def compute_observables(dataA, dataB):
     """
     Compute the parameters that are used in the Bayesian inference
     """
@@ -111,24 +97,20 @@ def compute_parameters(dataA, dataB):
         h_tall = hA
     # rotate the vectors
     [dAB, dABx, dABy, abs_dABy] = rotate_vectors(dxAB, dxBA, dyAB, dyBA, vxG, vyG)
-    return dAB, vG, vDiff, vvdot, vddot,  hAvg, hDiff, h_short, h_tall
 
+    observable_data = {
+    'd': dAB,
+    'v_g': vG,
+    'v_diff': vDiff,
+    'vv_dot': vvdot,
+    'vd_dot': vddot,
+    'h_avg': hAvg,
+    'h_diff': hDiff,
+    'h_short': h_short,
+    'h_tall': h_tall
+}
+    return observable_data
 
-def get_data_set(data_path):
-    dry_path = data_path + 'doryo/'
-    koi_path = data_path + 'koibito/'
-    dry_set = [dry_path + f for f in listdir(dry_path) if 'threshold' in f]
-    koi_set = [koi_path + f for f in listdir(koi_path) if 'threshold' in f]
-    return dry_set, koi_set
-
-def shuffle_data_set(dry_set, koi_set, train_ratio):
-    n_dry, n_koi = len(dry_set), len(koi_set)
-    n_dry_train, n_koi_train = round(train_ratio * n_dry), round(train_ratio * n_koi)
-
-    shuffled_dry = random.sample(dry_set, n_dry)
-    shuffled_koi = random.sample(koi_set, n_koi)
-    
-    return shuffled_dry[:n_dry_train], shuffled_dry[n_dry_train:], shuffled_koi[:n_koi_train], shuffled_koi[n_koi_train:]
 
 def threshold(data):
     """
@@ -251,4 +233,47 @@ def threshold_height(dataA, dataB):
     thresholdB = dataB[cond, :]
 
     return thresholdA, thresholdB
-    
+
+
+def initialize_histogram(obs):
+    """
+    Initialize an empty histogram for the given observable
+    """
+    (min_bound, max_bound, bin_size) = HISTOG_PARAM_TABLE[obs]
+    return np.zeros((round((max_bound - min_bound) / bin_size)))
+
+
+def compute_histogram(obs, obs_data):
+    """
+    Compute the histogram of the given observable data
+    """
+    (min_bound, max_bound, bin_size) = HISTOG_PARAM_TABLE[obs]
+    n_bins = round((max_bound - min_bound) / bin_size) + 1
+    edges = np.linspace(min_bound, max_bound, n_bins)
+    histog = np.histogram(obs_data, edges)
+    return histog[0]
+
+def compute_pdf(obs, histogram):
+    """
+    Compute the PDF of the given observable histogram
+    """
+    (_, _, bin_size) = HISTOG_PARAM_TABLE[obs]
+    pdf = histogram / sum(histogram) / bin_size
+    return pdf
+
+def get_edges(obs):
+    """
+    Compute the abscissa value to plot the PDF of the given observable parameter
+    """
+    (min_bound, max_bound, bin_size) = HISTOG_PARAM_TABLE[obs]
+    return np.arange(min_bound, max_bound, bin_size)
+
+def find_bins(obs, obs_data):
+    """
+    Find the bins that corresponds to each value in obs_data
+    """
+    (min_bound, max_bound, bin_size) = HISTOG_PARAM_TABLE[obs]
+    n_bins = round((max_bound - min_bound) / bin_size) + 1
+    edges = np.linspace(min_bound, max_bound, n_bins)
+    bins = np.digitize(obs_data, edges)
+    return bins
