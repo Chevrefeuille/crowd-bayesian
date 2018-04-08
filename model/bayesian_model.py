@@ -122,14 +122,15 @@ class BayesianEstimator():
                 sdt_succ = np.std(right_ns[c]) / len(tests_sets[c])
                 print('{}\t {:.2f}% ± {:.2f}%'.format(c, mean_succ * 100, sdt_succ * 100))
 
-    def plot_pdf(self, obs):
-        edges = tools.get_edges(obs)
-        for c in self.cl:
-            plt.plot(edges, self.pdfs[obs][c], label=c)
-        plt.xlabel(obs)
-        plt.ylabel('p({})'.format(obs))
-        plt.legend()
-        plt.show()
+    def plot_pdf(self):
+        for o in self.obs:
+            edges = tools.get_edges(o)
+            for c in self.cl:
+                plt.plot(edges, self.pdfs[o][c], label=c)
+            plt.xlabel(o)
+            plt.ylabel('p({})'.format(o))
+            plt.legend()
+            plt.show()
 
 
 

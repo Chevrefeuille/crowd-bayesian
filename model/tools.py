@@ -122,11 +122,7 @@ def threshold(data):
     dataA, dataB = threshold_data_veldiff(dataA, dataB)
     dataA, dataB = threshold_vvdot(dataA, dataB)
     dataA, dataB = threshold_height(dataA, dataB)
-
-    vxA, vyA = dataA[:, 5], dataA[:, 6]
-    vxB, vyB = dataB[:, 5], dataB[:, 6]
-
-    data2 = np.concatenate((dataA, dataB), axis=0)
+    
     return np.concatenate((dataA, dataB), axis=0)
 
 def threshold_distance(dataA, dataB):
