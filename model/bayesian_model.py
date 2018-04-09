@@ -3,6 +3,7 @@ from model import tools
 import matplotlib.pyplot as plt
 from os import listdir
 import random
+import operator
 
 def get_datasets(data_path, classes):
     """
@@ -68,25 +69,30 @@ class BayesianEstimator():
             for c in self.cl:
                 p_likes[c] = 1
                 for o in self.obs:
-                    p_likes[c] *= self.pdfs[o][c][bins[o][j]-1]
-
+                    if self.pdfs[o][c][bins[o][j]-1] != 0:
+                        p_likes[c] *= self.pdfs[o][c][bins[o][j]-1]
                 p_prior[c] = alpha * p_posts[c][0] + (1 - alpha) * p_posts[c][j-1]
-                p_conds[c] = p_likes[c] * p_prior[c]
+                p_conds[c] = p_likes[c] * p_prior[c]          
             s = sum(p_conds.values())
             for c in self.cl:
                 p_conds[c] /=  s
                 p_posts[c][j] = p_conds[c]
         mean_ps = {}
-        for c in self.cl: 
+        for c in self.cl:
             mean_ps[c] = np.mean(p_posts[c])
         return mean_ps
-        
+
     def evaluate(self, alpha, test_sets):
         results = {}
+        confusion_matrix = {}
         # print('-------------------------------')
         # print('\t Right \t Wrong \t Rate\n')
         for c in self.cl:
             results[c] = {'right': 0, 'wrong': 0}
+            # init condusion matrix
+            confusion_matrix[c] = {}
+            for c_pred in self.cl:
+                confusion_matrix[c][c_pred] = 0
             for file_path in test_sets[c]:
                 data = np.load(file_path)
                 data_A, data_B = tools.extract_individual_data(data)
@@ -95,12 +101,15 @@ class BayesianEstimator():
                 for o in self.obs:
                     bins[o] = tools.find_bins(o, obs_data[o])
                 mean_p = self.compute_probabilities(bins, alpha)
-                if mean_p[c] < 0.5:
-                    results[c]['wrong'] += 1
-                else:
+                class_max = max(mean_p.items(), key=operator.itemgetter(1))[0]
+                confusion_matrix[c][class_max] += 1
+                if class_max == c:
                     results[c]['right'] += 1
+                else:
+                    results[c]['wrong'] += 1
                 rate = results[c]['right'] / (results[c]['right'] + results[c]['wrong'])
             # print('{}\t {}\t {}\t {}'.format(c, results[c]['right'], results[c]['wrong'], rate))
+        tools.print_confusion_matrix(confusion_matrix)
         return results
 
     

@@ -4,6 +4,9 @@ import math
 from os import listdir
 import random
 from model.constants import *
+import pandas
+import matplotlib.pyplot as plt
+import itertools
 
 def convert(data):
     """
@@ -273,3 +276,32 @@ def find_bins(obs, obs_data):
     edges = np.linspace(min_bound, max_bound, n_bins)
     bins = np.digitize(obs_data, edges)
     return bins
+
+def print_confusion_matrix(matrix):
+    classes = matrix.keys()
+    m = []
+    for c in classes:
+        s = sum(matrix[c].values())
+        line = []
+        for c_pred in classes:
+            line.append(matrix[c][c_pred] / s)
+        m.append(line)
+    cm = pandas.DataFrame.from_dict(m)
+    
+    plt.figure()
+    plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.title('Confusion matrix')
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, format(cm[i][j], '.2f'),
+                 horizontalalignment="center",
+                 color="white" if cm[i][j] > .5 else "black")
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.show()
+
