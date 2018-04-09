@@ -3,6 +3,7 @@ from model import tools
 import matplotlib.pyplot as plt
 from os import listdir
 import random
+from model.constants import TRADUCTION_TABLE, PARAM_NAME_TABLE, PARAM_UNIT_TABLE, PLOT_PARAM_TABLE
 
 def get_datasets(data_path, classes):
     """
@@ -123,13 +124,16 @@ class BayesianEstimator():
                 print('{}\t {:.2f}% ± {:.2f}%'.format(c, mean_succ * 100, sdt_succ * 100))
 
     def plot_pdf(self):
+        plt.rcParams['grid.linestyle'] = '--'
         for o in self.obs:
             edges = tools.get_edges(o)
             for c in self.cl:
-                plt.plot(edges, self.pdfs[o][c], label=c)
-            plt.xlabel(o)
-            plt.ylabel('p({})'.format(o))
+                plt.plot(edges, self.pdfs[o][c], label=TRADUCTION_TABLE[c], linewidth=3)
+            plt.xlabel('{}({})'.format(PARAM_NAME_TABLE[o], PARAM_UNIT_TABLE[o]))
+            plt.ylabel('p({})'.format(PARAM_NAME_TABLE[o]))
+            plt.xlim(PLOT_PARAM_TABLE[o])
             plt.legend()
+            plt.grid()
             plt.show()
 
 
