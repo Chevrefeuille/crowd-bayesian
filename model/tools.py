@@ -277,19 +277,17 @@ def find_bins(obs, obs_data):
     bins = np.digitize(obs_data, edges)
     return bins
 
-def print_confusion_matrix(matrix):
-    classes = matrix.keys()
+def print_confusion_matrix(classes, matrix):
     m = []
     for c in classes:
-        s = sum(matrix[c].values())
-        line = []
+        line, s = [], sum(matrix[c].values())
         for c_pred in classes:
             line.append(matrix[c][c_pred] / s)
         m.append(line)
     cm = pandas.DataFrame.from_dict(m)
     
     plt.figure()
-    plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.imshow(cm.transpose(), interpolation='nearest', cmap=plt.cm.Blues)
     plt.title('Confusion matrix')
     plt.colorbar()
     tick_marks = np.arange(len(classes))
@@ -301,7 +299,7 @@ def print_confusion_matrix(matrix):
                  horizontalalignment="center",
                  color="white" if cm[i][j] > .5 else "black")
     plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
+    plt.ylabel('Predicted label')
+    plt.xlabel('True label')
     plt.show()
 

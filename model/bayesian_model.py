@@ -109,7 +109,7 @@ class BayesianEstimator():
                     results[c]['wrong'] += 1
                 rate = results[c]['right'] / (results[c]['right'] + results[c]['wrong'])
             # print('{}\t {}\t {}\t {}'.format(c, results[c]['right'], results[c]['wrong'], rate))
-        tools.print_confusion_matrix(confusion_matrix)
+        tools.print_confusion_matrix(self.cl, confusion_matrix)
         return results
 
     
