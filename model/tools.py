@@ -120,6 +120,7 @@ def threshold(data):
     Apply threshold to the various parameters
     """
     dataA, dataB = extract_individual_data(data)
+    # dataA, dataB = threshold_position(dataA, dataB)
     dataA, dataB = threshold_distance(dataA, dataB)
     dataA, dataB = threshold_velocity(dataA, dataB)
     dataA, dataB = threshold_data_veldiff(dataA, dataB)
@@ -127,6 +128,36 @@ def threshold(data):
     dataA, dataB = threshold_height(dataA, dataB)
     
     return np.concatenate((dataA, dataB), axis=0)
+
+def threshold_position(dataA, dataB):
+    """
+    Apply a threshold on the velocity to the given data
+    """
+    timeA = dataA[:, 0]
+    timeB = dataB[:, 0]
+
+    xA, yA = dataA[:, 2], dataA[:, 3]
+    xB, yB = dataB[:, 2], dataB[:, 3]
+
+    threshold_xA = np.logical_and(X_POSITION_THRESHOLD[0] < xA, xA < X_POSITION_THRESHOLD[1])
+    threshold_yA = np.logical_and(Y_POSITION_THRESHOLD[0] < yA, yA < Y_POSITION_THRESHOLD[1])
+    thresholdA = np.logical_and(threshold_xA, threshold_yA)
+
+    threshold_xB = np.logical_and(X_POSITION_THRESHOLD[0] < xB, xB < X_POSITION_THRESHOLD[1])
+    threshold_yB = np.logical_and(Y_POSITION_THRESHOLD[0] < yB, yB < Y_POSITION_THRESHOLD[1])
+    thresholdB = np.logical_and(threshold_xB, threshold_yB)
+
+    pre_thresholdA = timeA[thresholdA]
+    pre_thresholdB = timeB[thresholdB]
+    inter_threshold = np.intersect1d(pre_thresholdA, pre_thresholdB)
+
+    threshold_boolA = np.isin(timeA, inter_threshold)
+    threshold_boolB = np.isin(timeB, inter_threshold)
+
+    thresholdA = dataA[threshold_boolA, :]
+    thresholdB = dataB[threshold_boolB, :]
+
+    return thresholdA, thresholdB
 
 def threshold_distance(dataA, dataB):
     """

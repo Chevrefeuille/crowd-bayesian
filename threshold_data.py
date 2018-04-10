@@ -10,7 +10,7 @@ if __name__ == "__main__":
             data = tools.load_data_scilab(file_path)
             data = tools.convert(data)
             threshold_data = tools.threshold(data)
-            if np.shape(threshold_data[:,0])[0] > 60:
+            if np.shape(threshold_data[:,0])[0] > 120:
                 threshold_file_path = '{}_threshold.dat'.format(file_path.rstrip('.dat'))
                 print('Applying thresholds to {} and storing in {}'.format(file_path, threshold_file_path))
                 with open(threshold_file_path, 'wb') as outfile:
