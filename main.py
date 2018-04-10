@@ -3,8 +3,8 @@ import numpy as np
 
 if __name__ == "__main__":
 
-    classes = ['doryo', 'koibito', 'yujin', 'kazoku']
-    observables = ['v_g', 'v_diff', 'h_diff', 'd']
+    classes = ['koibito', 'doryo']
+    observables = ['v_g', 'd', 'h_diff', 'v_diff']
     bayesian_estimator = BayesianEstimator(cl=classes, obs=observables)
 
     datasets = get_datasets('data/classes/', classes)

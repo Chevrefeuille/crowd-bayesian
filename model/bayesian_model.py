@@ -69,9 +69,12 @@ class BayesianEstimator():
         for j in range(1, n_data):
             for c in self.cl:
                 p_likes[c] = 1
+                i = 0
                 for o in self.obs:
                     if self.pdfs[o][c][bins[o][j]-1] != 0:
                         p_likes[c] *= self.pdfs[o][c][bins[o][j]-1]
+                    # else:
+                        # i += 1
                 p_prior[c] = alpha * p_posts[c][0] + (1 - alpha) * p_posts[c][j-1]
                 p_conds[c] = p_likes[c] * p_prior[c]          
             s = sum(p_conds.values())
@@ -87,6 +90,7 @@ class BayesianEstimator():
         confusion_matrix = {}
         # print('-------------------------------')
         # print('\t Right \t Wrong \t Rate\n')
+        t = 0
         for c in self.cl:
             results[c] = {'right': 0, 'wrong': 0}
             # init condusion matrix
@@ -101,6 +105,7 @@ class BayesianEstimator():
                 for o in self.obs:
                     bins[o] = tools.find_bins(o, obs_data[o])
                 mean_p = self.compute_probabilities(bins, alpha)
+                # t += i
                 class_max = max(mean_p.items(), key=operator.itemgetter(1))[0]
                 confusion_matrix[c][class_max] += 1
                 if class_max == c:
@@ -110,6 +115,7 @@ class BayesianEstimator():
                 rate = results[c]['right'] / (results[c]['right'] + results[c]['wrong'])
             # print('{}\t {}\t {}\t {}'.format(c, results[c]['right'], results[c]['wrong'], rate))
         # tools.print_confusion_matrix(self.cl, confusion_matrix)
+        # print(t)
         return results
 
     

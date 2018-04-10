@@ -3,7 +3,7 @@ import numpy as np
 
 if __name__ == "__main__":
 
-    classes = ['yujin', 'kazoku']
+    classes = ['yujin', 'doryo']
     observables = ['v_g', 'v_diff', 'h_diff', 'd']
     bayesian_estimator = BayesianEstimator(cl=classes, obs=observables)
 
