@@ -117,7 +117,9 @@ def shuffle_data(data):
     """
     Shuffle the data
     """
+    rng_state = np.random.get_state()
     for c, d in data.items():
+        np.random.set_state(rng_state)
         np.random.shuffle(d)
         data[c] = d
     return data

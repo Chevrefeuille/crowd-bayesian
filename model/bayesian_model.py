@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import spatial, stats
 from model import tools
 import matplotlib.pyplot as plt
 from os import listdir
@@ -57,7 +58,7 @@ class BayesianEstimator():
                     histograms[o][c] += tools.compute_histogram(o, obs_data[o])
         for o in self.obs:
             for c in self.cl:
-                self.pdfs[o][c] = tools.compute_pdf(o,  histograms[o][c])
+                self.pdfs[o][c] = tools.compute_pdf(o, histograms[o][c])
     
     def compute_probabilities(self, bins, alpha):
         n_data = len(bins[self.obs[0]])
@@ -101,13 +102,50 @@ class BayesianEstimator():
                 data = np.load(file_path)
                 data_A, data_B = tools.extract_individual_data(data)
                 obs_data = tools.compute_observables(data_A, data_B)
-                # obs_data = tools.shuffle_data(obs_data)
+                obs_data = tools.shuffle_data(obs_data)
                 bins = {}
                 for o in self.obs:
                     bins[o] = tools.find_bins(o, obs_data[o])
                 mean_p = self.compute_probabilities(bins, alpha)
                 # t += i
                 class_max = max(mean_p.items(), key=operator.itemgetter(1))[0]
+                confusion_matrix[c][class_max] += 1
+                if class_max == c:
+                    results[c]['right'] += 1
+                else:
+                    results[c]['wrong'] += 1
+                rate = results[c]['right'] / (results[c]['right'] + results[c]['wrong'])
+            # print('{}\t {}\t {}\t {}'.format(c, results[c]['right'], results[c]['wrong'], rate))
+        # tools.print_confusion_matrix(self.cl, confusion_matrix)
+        # print(t)
+        return results
+    
+    def evaluate_distance(self, alpha, test_sets):
+        results = {}
+        confusion_matrix = {}
+        # print('-------------------------------')
+        # print('\t Right \t Wrong \t Rate\n')
+        t = 0
+        for c in self.cl:
+            results[c] = {'right': 0, 'wrong': 0}
+            # init condusion matrix
+            confusion_matrix[c] = {}
+            for c_pred in self.cl:
+                confusion_matrix[c][c_pred] = 0
+            for file_path in test_sets[c]:
+                data = np.load(file_path)
+                pdfs, distances = {}, {}
+                # initialize distances
+                for c_pred in self.cl:
+                    distances[c_pred] = 0
+                data_A, data_B = tools.extract_individual_data(data)
+                obs_data = tools.compute_observables(data_A, data_B)
+                for o in self.obs:
+                    pdfs[o] = tools.compute_pdf(o, tools.compute_histogram(o, obs_data[o]))
+                    for c_pred in self.cl:
+                        distances[c_pred] += stats.energy_distance(pdfs[o], self.pdfs[o][c_pred])
+                # t += i
+                class_max = min(distances.items(), key=operator.itemgetter(1))[0]
                 confusion_matrix[c][class_max] += 1
                 if class_max == c:
                     results[c]['right'] += 1
@@ -151,6 +189,17 @@ class BayesianEstimator():
             plt.grid()
             plt.show()
 
+    def plot_histogram(self, o, hist):
+        plt.rcParams['grid.linestyle'] = '--'
+        edges = tools.get_edges(o)
+        plt.plot(edges, hist, linewidth=3)
+        for c in self.cl:
+            plt.plot(edges, self.pdfs[o][c], label=TRADUCTION_TABLE[c], linewidth=3)
+        plt.xlabel('{}({})'.format(PARAM_NAME_TABLE[o], PARAM_UNIT_TABLE[o]))
+        plt.ylabel('p({})'.format(PARAM_NAME_TABLE[o]))
+        plt.xlim(PLOT_PARAM_TABLE[o])
+        plt.grid()
+        plt.show()
 
 
             
