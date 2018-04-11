@@ -58,7 +58,6 @@ def extract_individual_data(data):
     # print(np.shape(dataA))
     return dataA, dataB
 
-
 def compute_observables(dataA, dataB):
     """
     Compute the parameters that are used in the Bayesian inference
@@ -113,6 +112,16 @@ def compute_observables(dataA, dataB):
     'h_tall': h_tall
 }
     return observable_data
+
+def shuffle_data(data):
+    """
+    Shuffle the data
+    """
+    for c, d in data.items():
+        np.random.shuffle(d)
+        data[c] = d
+    return data
+
 
 
 def threshold(data):

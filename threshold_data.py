@@ -5,7 +5,7 @@ import math
 import glob
 
 if __name__ == "__main__":
-    for file_path in glob.iglob('data/**/*.dat', recursive=True):
+    for file_path in glob.iglob('data/classes/**/*.dat', recursive=True):
         if 'threshold' not in file_path and 'day' in file_path:
             data = tools.load_data_scilab(file_path)
             data = tools.convert(data)
