@@ -18,6 +18,22 @@ def get_datasets(data_path, classes):
         datasets[c] = class_set
     return datasets
 
+def get_equal_datasets(data_path, classes):
+    """
+    Get the dataset for the given classes
+    """
+    datasets, sizes = {}, []
+    for c in classes:
+        class_path = data_path + c +'/'
+        class_set = [class_path + f for f in listdir(class_path) if 'threshold' in f]
+        sizes.append(len(class_set))
+        datasets[c] = class_set
+    min_size = min(sizes)
+    for c in classes:
+        shuffled_set = random.sample(datasets[c], len(datasets[c]))
+        datasets[c] = shuffled_set[:min_size]
+    return datasets
+
 def shuffle_data_set(datasets, train_ratio):
     """
     Randomly partition the datasets into training and testing sets
