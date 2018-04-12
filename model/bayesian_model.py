@@ -118,7 +118,7 @@ class BayesianEstimator():
                 data = np.load(file_path)
                 data_A, data_B = tools.extract_individual_data(data)
                 obs_data = tools.compute_observables(data_A, data_B)
-                obs_data = tools.shuffle_data(obs_data)
+                # obs_data = tools.shuffle_data(obs_data)
                 bins = {}
                 for o in self.obs:
                     bins[o] = tools.find_bins(o, obs_data[o])

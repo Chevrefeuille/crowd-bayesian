@@ -4,7 +4,7 @@ if __name__ == "__main__":
     classes = ['koibito', 'doryo', 'kazoku', 'yujin']
     n_files = {}
     for c in classes:
-        class_path = '../data/classes/' + c
+        class_path = 'data/classes/' + c
         n_files[c] = len([class_path + f for f in listdir(class_path) if 'threshold' in f])
     tot_files = sum(n_files.values())
     print(n_files)

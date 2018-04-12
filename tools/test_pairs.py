@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     for pair in itertools.combinations(classes, 2):
         bayesian_estimator = BayesianEstimator(cl=list(pair), obs=observables)
-        datasets = get_datasets('../data/classes/', list(pair))
+        datasets = get_datasets('data/classes/', list(pair))
 
         bayesian_estimator.cross_validate(alphas, epoch, train_ratio, datasets)
         print('=========================================')
