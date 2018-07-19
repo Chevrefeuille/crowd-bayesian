@@ -9,8 +9,9 @@ if __name__ == "__main__":
         with open(annotation_path, 'r') as f:
             for line in f:
                 data = list(map(int, line.split()))
-                id_A, id_B, min_age = data[0], data[1], data[10]
-                if min_age < 15:
+                id_A, id_B, n_otoko, min_age = data[0], data[1], data[6], data[10]
+                if n_otoko < 2:
+                # if min_age < 15:
                     has_child[id_A] = True
                     has_child[id_B] = True
                 else:

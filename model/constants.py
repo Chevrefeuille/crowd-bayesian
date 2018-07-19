@@ -97,5 +97,7 @@ TRADUCTION_TABLE = {
     'koibito': 'M',
     'doryo': 'C',
     'yujin': 'Fr',
-    'kazoku': 'Fa'
+    'kazoku': 'Fa',
+    'kazoku_child': 'Fa w/ child',
+    'kazoku_adults': 'Fa no child'
 }

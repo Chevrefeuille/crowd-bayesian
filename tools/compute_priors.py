@@ -1,7 +1,7 @@
 from os import listdir
 
 if __name__ == "__main__":
-    classes = ['koibito', 'doryo', 'kazoku', 'yujin']
+    classes = ['kazoku_child', 'kazoku_adults']
     n_files = {}
     for c in classes:
         class_path = 'data/classes/' + c

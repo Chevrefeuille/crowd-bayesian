@@ -345,3 +345,60 @@ def print_confusion_matrix(classes, matrix):
     plt.xlabel('True label')
     plt.show()
 
+def get_mutual_inf(pj, q1, q2):
+    """
+    pj is the joint probabilty distribution.
+    It is a pdf but I need to scale it to 1, otherwise bin size is not accounted
+    So it looks like there is discrepancy.
+    q1 and q2 are the individual distribution of the two variables.
+    Similarly, they are scaled to 1.
+    """
+    q1 = q1 / np.sum(q1)
+    q2 = q2 / np.sum(q2)
+    
+    mutual_inf = 0
+    for i in range(0, len(q1)):
+        for j in range(0, len(q2)):
+            # only when all values are nonzero
+            if 0 not in np.array([ pj[i,j], q1[i], q2[j] ]):
+                mutual_inf += pj[i,j]*np.log(pj[i,j] / q1[i] / q2[j])    
+    return mutual_inf
+                
+def get_joint_ent(pj, q1, q2):
+    """
+    Takes only joint pdf. Scaled to 1 as above.
+    """
+    q1 = q1 / np.sum(q1)
+    q2 = q2 / np.sum(q2)
+    
+    joint_ent = 0
+    for p in range(0, len(pj)):
+        for q in range(0, len(pj[p])):
+            #if not math.isnan(pj[p,q] * np.log(pj[p, q])):
+            if 0 not in np.array([ pj[p,q], q1[p], q2[q] ]):
+                joint_ent = joint_ent - pj[p,q] * np.log(pj[p, q])
+    return joint_ent
+
+def compute_joint_histogram(obs1, obs_data1, obs2, obs_data2):
+    """
+    here the assumption is that the obs_data arrays match in time. 
+    """
+    
+    (min_bound, max_bound, bin_size) = HISTOG_PARAM_TABLE[obs1]
+    n_bins = round((max_bound - min_bound) / bin_size) + 1
+    edges1 = np.linspace(min_bound, max_bound, n_bins)
+    
+    (min_bound, max_bound, bin_size) = HISTOG_PARAM_TABLE[obs2]
+    n_bins = round((max_bound - min_bound) / bin_size) + 1
+    edges2 = np.linspace(min_bound, max_bound, n_bins)
+    
+    histogram2D, edges1, edges2 = np.histogram2d(obs_data1, obs_data2, bins=(edges1, edges2))
+
+    return histogram2D
+
+def compute_joint_pdf(histogram2D):
+    """
+    Here I donot scale with bin size.
+    """
+    pdf_joint = histogram2D / np.sum(histogram2D)
+    return pdf_joint

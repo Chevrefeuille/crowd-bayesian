@@ -4,7 +4,7 @@ import itertools
 
 if __name__ == "__main__":
 
-    classes = ['koibito', 'doryo', 'yujin', 'kazoku']
+    classes = ['koibito', 'doryo', 'yujin', 'kazoku_child', 'kazoku_adults']
     observables = ['v_g', 'd', 'h_diff', 'v_diff']
     
     train_ratio = 0.3

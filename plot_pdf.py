@@ -3,7 +3,7 @@ import numpy as np
 
 if __name__ == "__main__":
 
-    classes = ['yujin', 'doryo']
+    classes = classes = ['doryo', 'koibito', 'kazoku', 'yujin']
     observables = ['v_g', 'v_diff', 'h_diff', 'd']
     bayesian_estimator = BayesianEstimator(cl=classes, obs=observables)
 
@@ -13,4 +13,5 @@ if __name__ == "__main__":
 
     bayesian_estimator.train(train_sets=train_sets)
     bayesian_estimator.plot_pdf()
+    bayesian_estimator.save_pdfs()
     
