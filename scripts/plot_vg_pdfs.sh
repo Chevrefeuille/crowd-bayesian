@@ -33,13 +33,13 @@ set ylabel "p(v_g)"
 
 plot '../data/pdfs/v_g_doryo.txt' with lines  ls 1  title "C", \
      '../data/pdfs/v_g_koibito.txt' with lines  ls 2  title "M", \
-      '../data/pdfs/v_g_kazoku.txt' with lines  ls 3  title "A", \
-     '../data/pdfs/v_g_yujin.txt' with lines  ls 4  title "R"
+    #   '../data/pdfs/v_g_kazoku.txt' with lines  ls 3  title "A", \
+    #  '../data/pdfs/v_g_yujin.txt' with lines  ls 4  title "R"
     
 set key right top
 
-set terminal pngcairo
-set output '../results/vg_pdfs_all.png'
-# set output '../results/vg_pdfs.png'
+set terminal pdf
+# set output '../results/vg_pdfs_all.pdf'
+set output '../results/vg_pdfs.pdf'
 replot 
 set terminal x11

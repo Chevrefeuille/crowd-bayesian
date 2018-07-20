@@ -32,12 +32,13 @@ set ylabel "p({/Symbol d})"
 
 plot '../data/pdfs/d_doryo.txt' with lines  ls 1  title "C", \
      '../data/pdfs/d_koibito.txt' with lines  ls 2  title "M", \
-     '../data/pdfs/d_kazoku.txt' with lines  ls 3  title "A", \
-     '../data/pdfs/d_yujin.txt' with lines  ls 4  title "R", \
+    #  '../data/pdfs/d_kazoku.txt' with lines  ls 3  title "A", \
+    #  '../data/pdfs/d_yujin.txt' with lines  ls 4  title "R", \
  
 set key right top
 
-set terminal pngcairo
-set output '../results/d_pdfs_all.png'
+set terminal pdf
+# set output '../results/d_pdfs_all.pdf'
+set output '../results/d_pdfs.pdf'
 replot 
 set terminal x11

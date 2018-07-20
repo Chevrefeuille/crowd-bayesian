@@ -33,11 +33,12 @@ set ylabel "p({/Symbol D}_{/Symbol h})"
 
 plot '../data/pdfs/h_diff_doryo.txt' with lines  ls 1  title "C", \
      '../data/pdfs/h_diff_koibito.txt' with lines  ls 2  title "M", \
-     '../data/pdfs/h_diff_kazoku.txt' with lines  ls 3  title "A", \
-    '../data/pdfs/h_diff_yujin.txt' with lines  ls 4  title "R"
+    #  '../data/pdfs/h_diff_kazoku.txt' with lines  ls 3  title "A", \
+    # '../data/pdfs/h_diff_yujin.txt' with lines  ls 4  title "R"
 set key right top
 
-set terminal pngcairo
-set output '../results/hdiff_pdfs_all.png'
+set terminal pdf
+set output '../results/hdiff_pdfs.pdf'
+# set output '../results/hdiff_pdfs_all.pdf'
 replot 
 set terminal x11
